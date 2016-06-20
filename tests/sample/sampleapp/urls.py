@@ -6,6 +6,6 @@ from tests.sample.sampleapp.views import ArticleViewSet
 router = DefaultRouter()
 router.register('article', ArticleViewSet)
 
-urlpatterns = patterns(
+urlpatterns = [
     url(r'^', include(router.urls)),
-)
+]
