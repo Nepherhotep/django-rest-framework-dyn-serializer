@@ -20,3 +20,4 @@ class Review(models.Model):
     content = models.TextField()
     stars = models.IntegerField()
     user = models.ForeignKey(User, null=True, blank=True)
+    article = models.ForeignKey(Article, related_name='reviews')

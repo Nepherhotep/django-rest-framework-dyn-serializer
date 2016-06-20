@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'sampleapp',
+    'tests.sample.sampleapp',
 ]
 
 MIDDLEWARE_CLASSES = [
