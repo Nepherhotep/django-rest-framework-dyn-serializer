@@ -1,0 +1,27 @@
+language: python
+python:
+  - "2.7"
+  - "3.4"
+  - "3.5"
+# TODO: fix doctest freezing in Python 3.5
+
+# command to install dependencies
+install:
+ - pip install -q Django==$DJANGO_VERSION
+ - python setup.py -q install
+
+# setup different django versions
+env:
+#  - DJANGO_VERSION=1.8.3
+#  - DJANGO_VERSION=1.8.2
+#  - DJANGO_VERSION=1.8.1
+#  - DJANGO_VERSION=1.8
+#  - DJANGO_VERSION=1.9
+#  - DJANGO_VERSION=1.9.1
+#  - DJANGO_VERSION=1.9.2
+#  - DJANGO_VERSION=1.9.3
+  - DJANGO_VERSION=1.10
+
+# command to run tests
+script:
+  python django_orm_sugar.py
