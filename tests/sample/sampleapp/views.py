@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import views, generics, status, serializers, viewsets
 
 # Create your views here.
-from serializers import DynModelSerializer
+from dyn_model_serializer import DynModelSerializer
 from tests.sample.sampleapp.models import Article, Author, Review
 
 
@@ -35,5 +35,5 @@ class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
     def get_serializer(self, *args, **kwargs):
         context = self.get_serializer_context()
         context['request'] = self.request
-        s = ArticleDynSerializer(*args, context=context, **kwargs)
+        s = ArticleDynSerializer(*args, context=context, limit_fields=True, **kwargs)
         return s
