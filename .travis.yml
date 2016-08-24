@@ -1,6 +1,6 @@
 language: python
 python:
-#  - "2.7"
+  - "2.7"
   - "3.5"
 
 # command to install dependencies
@@ -9,7 +9,6 @@ install:
 
 # setup different django versions
 env:
-#  - DJANGO_VERSION=1.8
   - DJANGO_VERSION=1.9
 #  - DJANGO_VERSION=1.10
 
