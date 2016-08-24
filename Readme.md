@@ -88,9 +88,9 @@ class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
         s = ArticleDynSerializer(*args, context=context, limit_fields=True, **kwargs)
         return s
 ```
-Important! Dyn serializer requires explicit *limit_fields* set to True to work as dynamic, otherwise it's working as ordinary model serializer. Also *request* parameter is required in context, otherwise it will not be able to get which parameters to load.
+**Important!** Dyn serializer requires explicit *limit_fields* set to True to work as dynamic, otherwise it's working as ordinary model serializer. Also *request* parameter is required in context, otherwise it will not be able to get which parameters to load.
 
-Important! Dyn serializer limits fields only for GET requests. For POST, PATCH and DELETE requests it's working as ordinary serializer.
+**Important!** Dyn serializer limits fields only for GET requests. For POST, PATCH and DELETE requests it's working as ordinary serializer.
 
 ### Test endpoint
 #### Default (no fields specified)
