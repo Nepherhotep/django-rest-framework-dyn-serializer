@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import views, generics, status, serializers, viewsets
 
 # Create your views here.
-from dyn_model_serializer import DynModelSerializer
+from rest_framework_dyn_serializer import DynModelSerializer
 from tests.sample.sampleapp.models import Article, Author, Review
 
 
