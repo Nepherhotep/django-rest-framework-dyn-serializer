@@ -3,7 +3,7 @@ from rest_framework import views, generics, status, serializers, viewsets
 
 # Create your views here.
 from rest_framework_dyn_serializer import DynModelSerializer
-from tests.sample.sampleapp.models import Article, Author, Review
+from test_samples.sample.sampleapp.models import Article, Author, Review
 
 
 class AuthorDynSerializer(DynModelSerializer):

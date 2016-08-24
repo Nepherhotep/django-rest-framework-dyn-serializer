@@ -6,9 +6,10 @@ class DynModelSerializer(serializers.ModelSerializer):
     Factory to include/exclude fields dynamically
     """
 
-    def __init__(self, *args, limit_fields=False, **kwargs):
+    def __init__(self, *args, **kwargs):
         self._requested_fields = []
 
+        limit_fields = kwargs.pop('limit_fields', False)
         s_type = type(self)
         assert hasattr(self.Meta, 'model'), '{} Meta.model param is required'.format(s_type)
 
