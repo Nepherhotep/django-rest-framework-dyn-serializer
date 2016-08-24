@@ -13,6 +13,6 @@ of GraphQL.
 
 ## Installation
 
-```code
+```
 pip install rest_framework_dyn_serializer
 ```
