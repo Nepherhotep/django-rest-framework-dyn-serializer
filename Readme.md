@@ -1,4 +1,4 @@
-# DRF Dynamic Model Serializer [WARNING IN DEVELOPMENT]
+# DRF Dynamic Model Serializer [![Build Status](https://travis-ci.org/Nepherhotep/django-rest-framework-dyn-serializer.svg?branch=master)](https://travis-ci.org/Nepherhotep/django-rest-framework-dyn-serializer)
 
 ## Intro
 
