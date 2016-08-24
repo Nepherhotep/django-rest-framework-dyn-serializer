@@ -87,3 +87,73 @@ class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
         s = ArticleDynSerializer(*args, context=context, limit_fields=True, **kwargs)
         return s
 ```
+
+### Test endpoint
+#### Default (no fields specified)
+```
+curl http://localhost:8000/article/
+```
+```json
+[
+    {
+        "id": 1
+    },
+    {
+        "id": 2
+    }
+]
+```
+
+#### With article fields
+```
+curl http://localhost:8000/article/?article_fields=id,title,content,author
+```
+```json
+  [
+    {
+        "title": "Title 1",
+        "content": "Lorem ipsum dolor sit amet...",
+        "id": 1,
+        "author": {
+            "id": 1
+        }
+    },
+    {
+        "title": "Title 2",
+        "content": "Lorem ipsum dolor sit amet...",
+        "id": 2,
+        "author": {
+            "id": 1
+        }
+    }
+]
+```
+
+#### With article and author fields
+```
+curl http://localhost:8000/article/?article_fields=id,title,content,author&author_fields=id,name
+```
+```json
+  [
+    {
+        "title": "Title 1",
+        "content": "Lorem ipsum dolor sit amet...",
+        "id": 1,
+        "author": {
+            "id": 1,
+            "name": "John Smith"
+        }
+    },
+    {
+        "title": "Title 2",
+        "content": "Lorem ipsum dolor sit amet...",
+        "id": 2,
+        "author": {
+            "id": 1,
+            "name": "John Smith"
+        }
+    }
+]
+```
+
+
