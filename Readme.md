@@ -30,3 +30,62 @@ rest_framework_dyn_serializer
 ```
 
 Actually, it makes sense for other libraries as well, just a reminder.
+
+## Usage
+
+### Define models
+```
+from django.contrib.auth.models import User
+from django.db import models
+
+
+class Author(models.Model):
+    name = models.CharField(max_length=50)
+    birth_date = models.DateField(blank=True, null=True)
+
+
+class Article(models.Model):
+    title = models.CharField(max_length=255)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    content = models.TextField()
+    author = models.ForeignKey(Author, related_name='articles')
+```
+
+### Define serializer
+```
+from django.shortcuts import render
+from rest_framework import views, generics, status, serializers, viewsets
+
+# Create your views here.
+from rest_framework_dyn_serializer import DynModelSerializer
+from test_samples.sample.sampleapp.models import Article, Author, Review
+
+
+class AuthorDynSerializer(DynModelSerializer):
+    class Meta:
+        model = Author
+        fields_param = 'author_fields'
+        fields = ['id', 'name', 'birth_date']
+
+
+class ArticleDynSerializer(DynModelSerializer):
+    author = AuthorDynSerializer(required=False)
+
+    class Meta:
+        model = Article
+        fields_param = 'article_fields'
+        fields = ['id', 'title', 'created', 'updated', 'content', 'author']
+```
+
+### Set view or viewset to use dynamic serializer
+```
+class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Article.objects.all().order_by('id')
+
+    def get_serializer(self, *args, **kwargs):
+        context = self.get_serializer_context()
+        context['request'] = self.request
+        s = ArticleDynSerializer(*args, context=context, limit_fields=True, **kwargs)
+        return s
+```
