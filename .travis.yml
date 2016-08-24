@@ -5,12 +5,13 @@ python:
 
 # command to install dependencies
 install:
- - pip install -q Django==$DJANGO_VERSION djangorestframework==3.3.1
+ - pip install -q Django==$DJANGO_VERSION djangorestframework==$DRF_VERSION
 
 # setup different django versions
 env:
-  - DJANGO_VERSION=1.9
-#  - DJANGO_VERSION=1.10
+  - DJANGO_VERSION=1.9 DRF_VERSION=3.3.0
+  - DJANGO_VERSION=1.9 DRF_VERSION=3.4.0
+  - DJANGO_VERSION=1.9 DRF_VERSION=3.4.6
 
 # command to run tests
 script:
