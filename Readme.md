@@ -75,6 +75,7 @@ class ArticleDynSerializer(DynModelSerializer):
         fields_param = 'article_fields'
         fields = ['id', 'title', 'created', 'updated', 'content', 'author']
 ```
+*fields_param* in Meta corresponds to list of fields, passed as coma separated GET parameter
 
 ### Set view or viewset to use dynamic serializer
 ```python
