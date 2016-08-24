@@ -16,3 +16,17 @@ of GraphQL.
 ```
 pip install rest_framework_dyn_serializer
 ```
+
+Important! Serializer API may change in future, so always freeze version in requirements.txt:
+
+Good: 
+```
+rest_framework_dyn_serializer==1.0.0
+```
+
+Bad:
+```
+rest_framework_dyn_serializer
+```
+
+Actually, it makes sense for other libraries as well, just a reminder.
