@@ -22,4 +22,4 @@ env:
 
 # command to run tests
 script:
-  python ./tests/sample/sampleproj/manage.py test
+  python ./tests/sample/manage.py test
