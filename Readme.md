@@ -34,7 +34,7 @@ Actually, it makes sense for other libraries as well, just a reminder.
 ## Usage
 
 ### Define models
-```
+```python
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -53,11 +53,9 @@ class Article(models.Model):
 ```
 
 ### Define serializer
-```
-from django.shortcuts import render
+```python
 from rest_framework import views, generics, status, serializers, viewsets
 
-# Create your views here.
 from rest_framework_dyn_serializer import DynModelSerializer
 from test_samples.sample.sampleapp.models import Article, Author, Review
 
@@ -79,7 +77,7 @@ class ArticleDynSerializer(DynModelSerializer):
 ```
 
 ### Set view or viewset to use dynamic serializer
-```
+```python
 class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Article.objects.all().order_by('id')
 
