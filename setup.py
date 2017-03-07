@@ -14,7 +14,7 @@ setup(
     license="MIT",
     platforms=['Platform Independent'],
     url="https://github.com/Nepherhotep/django-rest-framework-dyn-serializer",
-    install_requires=['django==1.9', 'djangorestframework>=3.3.0'],
+    install_requires=['django>=1.9', 'djangorestframework>=3.3.0'],
     classifiers=["Framework :: Django :: 1.9",
                  "Development Status :: 5 - Production/Stable",
                  "Programming Language :: Python :: 2.7",
