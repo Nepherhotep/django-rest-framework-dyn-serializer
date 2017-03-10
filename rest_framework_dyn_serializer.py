@@ -54,7 +54,7 @@ class DynModelSerializer(serializers.ModelSerializer):
             self.request_all_allowed_fields()
 
     def get_value(self, data):
-        if not self.nested:
+        if not self.nested or self.field_name not in data:
             return super().get_value(data)
         return data[self.field_name]
 
