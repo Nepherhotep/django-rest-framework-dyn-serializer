@@ -79,7 +79,8 @@ class MainTest(TestCase):
         assert 'birth_date' not in author, author
 
     def test_list_articles_with_author_extended_fields(self):
-        response = self.client.get('/article/?article_fields=id,author&author_fields=id,name,birth_date')
+        query = '/article/?article_fields=id,author&author_fields=id,name,birth_date'
+        response = self.client.get(query)
 
         assert response.status_code == 200, response.status_code
 
@@ -104,6 +105,28 @@ class MainTest(TestCase):
         assert 'author' in response_json, response_json
 
         author = response_json['author']
-        assert author == {'id': self.author1.id,
-                          'name': 'author 1',
-                          'birth_date': '1985-01-31'}, author
+        expected_author = {
+            'id': self.author1.id,
+            'name': 'author 1',
+            'birth_date': '1985-01-31'
+        }
+        assert author == expected_author, author
+
+    def test_limit_fields_as_serializer_meta_attribute(self):
+        url = '/article_limit_fields/{}/'.format(self.articles[0].id)
+        query = 'article_fields=id,author&author_fields=id,name'
+
+        response = self.client.get('{}?{}'.format(url, query))
+
+        assert response.status_code == 200, response.status_code
+
+        response_json = response.json()
+        assert 'author' in response_json, response_json
+        assert 'content' not in response_json, response_json
+
+        author = response_json['author']
+        expected_author = {
+            'id': self.author1.id,
+            'name': 'author 1',
+        }
+        assert author == expected_author, author

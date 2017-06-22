@@ -11,19 +11,16 @@ class DynModelSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         self._requested_fields = []
 
-        limit_fields = kwargs.pop('limit_fields', False)
-        self.nested = kwargs.pop('nested', False)
         s_type = type(self)
         assert hasattr(self.Meta, 'model'), '{} Meta.model param is required'.format(s_type)
-
-        if hasattr(self.Meta, 'default_fields'):
-            self.default_fields = list(self.Meta.default_fields)
-        else:
-            self.default_fields = ['id']
-
-        self.set_allowed_fields()
         assert hasattr(self.Meta, 'fields_param'), \
             '{} Meta.fields_param param cannot be empty'.format(s_type)
+
+        self.nested = kwargs.pop('nested', False)
+        self.default_fields = list(getattr(self.Meta, 'default_fields', ['id']))
+        self.limit_fields = kwargs.pop('limit_fields', getattr(self.Meta, 'limit_fields', False))
+
+        self.set_allowed_fields()
 
         for field_name in self.default_fields:
             assert field_name in self._allowed_fields, '{} Meta.default_fields contains field "{}"'\
@@ -31,8 +28,6 @@ class DynModelSerializer(serializers.ModelSerializer):
                                                                                         field_name)
 
         super(DynModelSerializer, self).__init__(*args, **kwargs)
-
-        self.limit_fields = limit_fields
 
         if self.limit_fields:
             request = self.get_request()

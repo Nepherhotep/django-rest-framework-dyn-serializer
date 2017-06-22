@@ -78,6 +78,8 @@ class ArticleDynSerializer(DynModelSerializer):
 *fields_param* in Meta corresponds to list of fields, passed as coma separated GET parameter
 
 ### Set view or viewset to use dynamic serializer
+There are two options to make serializer dynamic. Instantiate serializer with keyword 
+argument `limit_fields = True`. Keyword argument overrides `limit_fields` value from `Meta`
 ```python
 class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Article.objects.all().order_by('id')
@@ -87,6 +89,21 @@ class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
         context['request'] = self.request
         s = ArticleDynSerializer(*args, context=context, limit_fields=True, **kwargs)
         return s
+```
+Or made serializer dynamic by default. Add `limit_fields = True` attribute to serializer `Meta`
+```python
+class ArticleDynSerializer(DynModelSerializer):
+    author = AuthorDynSerializer(required=False)
+
+    class Meta:
+        model = Article
+        fields_param = 'article_fields'
+        fields = ['id', 'title', 'created', 'updated', 'content', 'author']
+        limit_fields = True
+
+class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Article.objects.all().order_by('id') 
+    serializer_class = ArticleDynSerializer
 ```
 **Important!** Dyn serializer requires explicit *limit_fields* set to True to work as dynamic, otherwise it's working as ordinary model serializer. Also *request* parameter is required in context, otherwise it will not be able to get which parameters to load.
 

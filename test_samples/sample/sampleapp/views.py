@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from rest_framework import views, generics, status, serializers, viewsets
+from rest_framework import viewsets
 
 # Create your views here.
 from rest_framework_dyn_serializer import DynModelSerializer
@@ -37,3 +36,18 @@ class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
         context['request'] = self.request
         s = ArticleDynSerializer(*args, context=context, limit_fields=True, **kwargs)
         return s
+
+
+class LimitFieldsArticle(DynModelSerializer):
+    author = AuthorDynSerializer(required=False, limit_fields=True)
+
+    class Meta:
+        model = Article
+        fields_param = 'article_fields'
+        fields = ['id', 'title', 'created', 'updated', 'content', 'author']
+        limit_fields = True
+
+
+class ArticleViewSetLimitFields(viewsets.ReadOnlyModelViewSet):
+    serializer_class = LimitFieldsArticle
+    queryset = Article.objects.all().order_by('id')
