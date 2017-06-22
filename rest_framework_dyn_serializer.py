@@ -1,3 +1,5 @@
+from django.core.exceptions import ObjectDoesNotExist
+
 from rest_framework import serializers
 
 
@@ -10,6 +12,7 @@ class DynModelSerializer(serializers.ModelSerializer):
         self._requested_fields = []
 
         limit_fields = kwargs.pop('limit_fields', False)
+        self.nested = kwargs.pop('nested', False)
         s_type = type(self)
         assert hasattr(self.Meta, 'model'), '{} Meta.model param is required'.format(s_type)
 
@@ -49,6 +52,24 @@ class DynModelSerializer(serializers.ModelSerializer):
                 self.request_all_allowed_fields()
         else:
             self.request_all_allowed_fields()
+
+    def get_value(self, data):
+        if not self.nested or self.field_name not in data:
+            return super().get_value(data)
+        return data[self.field_name]
+
+    def to_internal_value(self, data):
+        '''
+        Allow pass value of nested field, assume that passed value is PK
+        '''
+        if not self.nested:
+            return super().to_internal_value(data)
+        try:
+            return self.Meta.model.objects.get(pk=data)
+        except ObjectDoesNotExist:
+            self.fail('does_not_exist', pk_value=data)
+        except (TypeError, ValueError):
+            self.fail('incorrect_type', data_type=type(data).__name__)
 
     def request_all_allowed_fields(self):
         for field in self._allowed_fields:
