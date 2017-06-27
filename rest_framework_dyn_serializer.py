@@ -7,6 +7,10 @@ class DynModelSerializer(serializers.ModelSerializer):
     """
     Factory to include/exclude fields dynamically
     """
+    default_error_messages = {
+        'does_not_exist': 'Invalid pk "{pk_value}" - object does not exist.',
+        'incorrect_type': 'Incorrect type. Expected pk value, received {data_type}.',
+    }
 
     def __init__(self, *args, **kwargs):
         self._requested_fields = []
@@ -54,9 +58,9 @@ class DynModelSerializer(serializers.ModelSerializer):
         return data[self.field_name]
 
     def to_internal_value(self, data):
-        '''
+        """
         Allow pass value of nested field, assume that passed value is PK
-        '''
+        """
         if not self.nested:
             return super().to_internal_value(data)
         try:
