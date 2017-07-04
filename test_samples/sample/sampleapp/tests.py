@@ -130,3 +130,21 @@ class MainTest(TestCase):
             'name': 'author 1',
         }
         assert author == expected_author, author
+
+    def test_limit_fields_for_nested_serializers_with_many_true(self):
+        url = '/author/{}/'.format(self.articles[0].id)
+        query = 'author_fields=id,article&article_fields=id,review&review_fields=id,stars'
+
+        response = self.client.get('{}?{}'.format(url, query))
+
+        assert response.status_code == 200, response.status_code
+
+        response_json = response.json()
+
+        assert 'article' in response_json, response_json
+        for article in response_json['article']:
+            assert 'title' not in article, article
+            assert 'review' in article
+            for review in article['review']:
+                assert 'summary' not in review
+                assert 'stars' in review
