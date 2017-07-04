@@ -102,7 +102,10 @@ class DynModelSerializer(serializers.ModelSerializer):
 
             for field_name in self.fields:
                 field = self.fields[field_name]
-                if isinstance(field, DynModelSerializer):
+                if isinstance(field, serializers.ListSerializer):
+                    if isinstance(field.child, DynModelSerializer):
+                        field.child.exclude_omitted_fields(request)
+                elif isinstance(field, DynModelSerializer):
                     field.exclude_omitted_fields(request)
 
     def get_requested_field_names(self, request):
