@@ -5,7 +5,7 @@ __author__ = 'Alexey Zankevich'
 
 setup(
     name="rest_framework_dyn_serializer",
-    version="1.2.0",
+    version="1.2.1",
     py_modules=['rest_framework_dyn_serializer'],
     author="Alexey Zankevich",
     author_email="alex.zankevich@gmail.com",
