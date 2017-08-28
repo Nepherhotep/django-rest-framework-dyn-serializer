@@ -43,7 +43,7 @@ class DynModelSerializer(serializers.ModelSerializer):
                     for field_name, field_name in self.fields.items():
                         # assigning parent context to allow child serializers to update their fields
                         # later
-                        field_name.context = self.context
+                        field_name._context = self.context
                 else:
                     self.limit_fields = False
                     self.request_all_allowed_fields()
