@@ -79,6 +79,7 @@ class ArticleDynSerializer(DynModelSerializer):
         fields = ['id', 'title', 'created', 'updated', 'content', 'author']
 ```
 *fields* in init is an optional parameter to override the list of fields declared in Meta class
+
 *fields_param* in Meta corresponds to list of fields, passed as coma separated GET parameter
 
 ### Set view or viewset to use dynamic serializer
