@@ -24,7 +24,7 @@ class DynModelSerializer(serializers.ModelSerializer):
         self.default_fields = list(getattr(self.Meta, 'default_fields', ['id']))
         self.limit_fields = kwargs.pop('limit_fields', getattr(self.Meta, 'limit_fields', False))
 
-        self.set_allowed_fields()
+        self.set_allowed_fields(kwargs.pop('fields', None))
 
         for field_name in self.default_fields:
             assert field_name in self._allowed_fields, '{} Meta.default_fields contains field "{}"'\
@@ -77,17 +77,19 @@ class DynModelSerializer(serializers.ModelSerializer):
     def get_request(self):
         return self.context.get('request')
 
-    def set_allowed_fields(self):
+    def set_allowed_fields(self, fields=None):
         if hasattr(self.Meta, 'fields'):
-            fields = list(self.Meta.fields)
+            meta_fields = list(self.Meta.fields)
         else:
-            fields = []
+            meta_fields = []
             for field_obj in self.Meta.model._meta.get_fields():
-                fields.append(field_obj.name)
+                meta_fields.append(field_obj.name)
 
+        include = meta_fields if not fields else [
+            field for field in meta_fields if field in fields]
         exclude = set(getattr(self.Meta, 'exclude', []))
 
-        self._allowed_fields = list(set(fields) - exclude)
+        self._allowed_fields = list(set(include) - exclude)
 
     def exclude_omitted_fields(self, request):
         field_names = self.get_requested_field_names(request)

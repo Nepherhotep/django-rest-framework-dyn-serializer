@@ -2,6 +2,7 @@ from datetime import date
 from pprint import pprint
 
 from django.test import TestCase
+from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 from test_samples.sample.sampleapp.models import Author, Article, Review
 
@@ -9,6 +10,9 @@ from test_samples.sample.sampleapp.models import Author, Article, Review
 class MainTest(TestCase):
     def setUp(self):
         self.client = APIClient()
+
+        self.reviewer = get_user_model().objects.create(
+            username='reviewer', first_name='reviewer', last_name='reviewer')
 
         self.author1 = Author.objects.create(name='author 1',
                                              birth_date=date(1985, 1, 31))
@@ -29,7 +33,8 @@ class MainTest(TestCase):
                     Review.objects.create(article=article,
                                           summary='summary {}'.format(j),
                                           content='content {}'.format(j),
-                                          stars=j)
+                                          stars=j,
+                                          user=self.reviewer)
 
     def test_list_articles(self):
         response = self.client.get('/article/')
@@ -148,3 +153,19 @@ class MainTest(TestCase):
             for review in article['review']:
                 assert 'summary' not in review
                 assert 'stars' in review
+
+    def test_list_reviews_with_restricted_fields(self):
+        review = Review.objects.first()
+
+        url = '/review/{}/'.format(review.id)
+        query = 'review_fields=id,stars,user&user_fields=username,first_name'
+
+        response = self.client.get('{}?{}'.format(url, query))
+
+        assert response.status_code == 200, response.status_code
+
+        response_json = response.json()
+
+        assert 'user' in response_json, response_json
+        assert 'first_name' in response_json['user']
+        assert 'username' not in response_json['user']
