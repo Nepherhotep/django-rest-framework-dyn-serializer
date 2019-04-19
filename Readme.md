@@ -21,7 +21,7 @@ Important! Serializer API may change in future, so always freeze version in requ
 
 Good: 
 ```
-rest_framework_dyn_serializer==1.0.1
+rest_framework_dyn_serializer==1.3.1
 ```
 
 Bad:
